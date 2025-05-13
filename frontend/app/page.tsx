@@ -1,21 +1,25 @@
 "use client";
 import React, { useState } from 'react';
-import { generateOutline, generateDraft } from '../lib/api';
+import { generateOutline, generateDraft, generateImage } from '../lib/api';
 
 const steps = [
   { label: "Idea" },
   { label: "Outline" },
   { label: "Draft" },
+  { label: "Image" },
 ];
 
 export default function Home() {
   const [topic, setTopic] = useState('');
   const [outline, setOutline] = useState('');
   const [draft, setDraft] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [draftLoading, setDraftLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const [error, setError] = useState('');
   const [draftError, setDraftError] = useState('');
+  const [imageError, setImageError] = useState('');
   const [activeStep, setActiveStep] = useState(0);
 
   const handleSubmit = async (e: any) => {
@@ -24,7 +28,9 @@ export default function Home() {
     setError('');
     setOutline('');
     setDraft('');
+    setImageUrl('');
     setDraftError('');
+    setImageError('');
     try {
       const result = await generateOutline(topic);
       setOutline(result);
@@ -40,6 +46,8 @@ export default function Home() {
     setDraftLoading(true);
     setDraftError('');
     setDraft('');
+    setImageUrl('');
+    setImageError('');
     try {
       const result = await generateDraft(outline);
       setDraft(result);
@@ -51,13 +59,40 @@ export default function Home() {
     }
   };
 
+  const handleImage = async () => {
+    setImageLoading(true);
+    setImageError('');
+    setImageUrl('');
+    
+    try {
+      // Create a prompt from the topic and a summary of the draft
+      // We're using the topic to provide context and asking for an image that represents the content
+      const prompt = `Create a professional, high-quality image that represents this topic: "${topic}". 
+      The content discusses: ${draft.substring(0, 300)}...
+      The image should be suitable for a blog post or article about this topic.`;
+      
+      const result = await generateImage(prompt);
+      setImageUrl(result);
+      setActiveStep(3);
+    } catch (err: any) {
+      setImageError(err.message || 'Error generating image');
+    } finally {
+      setImageLoading(false);
+    }
+  };
+
   const handleBack = () => {
-    if (activeStep === 2) {
+    if (activeStep === 3) {
+      setImageUrl('');
+      setActiveStep(2);
+    } else if (activeStep === 2) {
       setDraft('');
+      setImageUrl('');
       setActiveStep(1);
     } else if (activeStep === 1) {
       setOutline('');
       setDraft('');
+      setImageUrl('');
       setActiveStep(0);
     }
   };
@@ -98,12 +133,12 @@ export default function Home() {
               className="border border-brand-grayBorder rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-pink text-base placeholder-brand-grayMedium transition"
               value={topic}
               onChange={e => setTopic(e.target.value)}
-              disabled={loading || draftLoading}
+              disabled={loading || draftLoading || imageLoading}
             />
             <button
               type="submit"
               className="button-primary mt-2 disabled:opacity-60"
-              disabled={loading || !topic.trim() || draftLoading}
+              disabled={loading || !topic.trim() || draftLoading || imageLoading}
             >
               {loading ? 'Generating...' : 'Generate Outline'}
             </button>
@@ -120,14 +155,14 @@ export default function Home() {
               <button
                 onClick={handleBack}
                 className="button-secondary"
-                disabled={loading || draftLoading}
+                disabled={loading || draftLoading || imageLoading}
               >
                 Back
               </button>
               <button
                 onClick={handleDraft}
                 className="button-primary"
-                disabled={draftLoading}
+                disabled={draftLoading || imageLoading}
               >
                 {draftLoading ? 'Generating Draft...' : 'Generate Draft'}
               </button>
@@ -145,10 +180,46 @@ export default function Home() {
               <button
                 onClick={handleBack}
                 className="button-secondary"
-                disabled={loading || draftLoading}
+                disabled={loading || draftLoading || imageLoading}
               >
                 Back
               </button>
+              <button
+                onClick={handleImage}
+                className="button-primary"
+                disabled={imageLoading}
+              >
+                {imageLoading ? 'Generating Image...' : 'Generate Image'}
+              </button>
+            </div>
+            {imageError && <div className="border border-red-200 rounded-md p-2 text-red-600 text-center bg-red-50 mt-4">{imageError}</div>}
+          </>
+        )}
+        {activeStep === 3 && (
+          <>
+            <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Featured Image</h2>
+            <div className="border border-brand-grayBorder rounded-md overflow-hidden mb-4">
+              <img 
+                src={imageUrl} 
+                alt="Generated content image" 
+                className="w-full h-auto"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleBack}
+                className="button-secondary"
+              >
+                Back
+              </button>
+              <a 
+                href={imageUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="button-primary"
+              >
+                Download Image
+              </a>
             </div>
           </>
         )}

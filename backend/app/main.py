@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.agents.outline_agent import generate_outline
 from app.agents.draft_agent import generate_draft
+from app.agents.image_agent import generate_image_openai
 from app.schemas.outline import OutlineRequest, OutlineResponse
 from app.schemas.draft import DraftRequest, DraftResponse
+from app.schemas.image import ImageRequest, ImageResponse
 
 app = FastAPI()
 
@@ -29,5 +31,10 @@ def outline(request: OutlineRequest):
 def draft(request: DraftRequest):
     draft = generate_draft(request.outline)
     return DraftResponse(draft=draft)
+
+@app.post("/image", response_model=ImageResponse)
+def image(request: ImageRequest):
+    image_url = generate_image_openai(request.prompt)
+    return ImageResponse(image_url=image_url)
 
 # Placeholder for agent endpoints
