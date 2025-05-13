@@ -18,7 +18,7 @@ export default function Home() {
   const [draftError, setDraftError] = useState('');
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -63,88 +63,88 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
-      <h1 className="text-3xl font-bold mb-8">AI Content Co-Pilot</h1>
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-brand-grayLight">
+      <h1 className="text-4xl font-bold mb-8 text-brand-charcoal tracking-tight">AI Content Co-Pilot</h1>
       {/* Stepper */}
       <div className="flex items-center mb-8 w-full max-w-2xl">
         {steps.map((step, idx) => (
-          <React.Fragment key={step.label}>
+          <>
             <div className="flex flex-col items-center flex-1">
-              <div className={`rounded-full w-8 h-8 flex items-center justify-center font-bold text-white ${
-                activeStep === idx
-                  ? 'bg-blue-600 scale-110 shadow-lg'
+              <div className={`rounded-full w-9 h-9 flex items-center justify-center font-bold text-white shadow transition-all duration-200
+                ${activeStep === idx
+                  ? 'bg-brand-pink scale-110 shadow-lg'
                   : activeStep > idx
-                  ? 'bg-green-500'
-                  : 'bg-gray-300'
-              }`}>
+                  ? 'bg-brand-charcoal'
+                  : 'bg-brand-grayMedium'}
+              `}>
                 {idx + 1}
               </div>
-              <span className={`mt-2 text-xs font-medium ${activeStep === idx ? 'text-blue-700' : 'text-gray-500'}`}>{step.label}</span>
+              <span className={`mt-2 text-xs font-semibold tracking-wide ${activeStep === idx ? 'text-brand-pink' : 'text-brand-grayMedium'}`}>{step.label}</span>
             </div>
             {idx < steps.length - 1 && (
-              <div className={`flex-1 h-1 ${activeStep > idx ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+              <div className={`flex-1 h-1 ${activeStep > idx ? 'bg-brand-charcoal' : 'bg-brand-grayMedium'} mx-1 rounded-full`}></div>
             )}
-          </React.Fragment>
+          </>
         ))}
       </div>
       {/* Step Content */}
-      <div className="w-full max-w-2xl bg-white rounded shadow p-6">
+      <div className="w-full max-w-2xl bg-white rounded-md shadow-lg p-8">
         {activeStep === 0 && (
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <label className="font-medium">Enter your idea or topic:</label>
+            <label className="font-semibold text-brand-charcoal">Enter your idea or topic:</label>
             <input
               type="text"
               placeholder="e.g. The Future of AI in Content Creation"
-              className="border rounded px-3 py-2"
+              className="border border-brand-grayBorder rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-pink text-base placeholder-brand-grayMedium transition"
               value={topic}
               onChange={e => setTopic(e.target.value)}
               disabled={loading || draftLoading}
             />
             <button
               type="submit"
-              className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
+              className="button-primary mt-2 disabled:opacity-60"
               disabled={loading || !topic.trim() || draftLoading}
             >
               {loading ? 'Generating...' : 'Generate Outline'}
             </button>
-            {error && <div className="border rounded p-2 text-red-600 text-center">{error}</div>}
+            {error && <div className="border border-red-200 rounded-md p-2 text-red-600 text-center bg-red-50">{error}</div>}
           </form>
         )}
         {activeStep === 1 && (
           <>
-            <h2 className="text-xl font-semibold mb-2">Outline</h2>
-            <pre className="border rounded p-4 text-left whitespace-pre-wrap bg-gray-50 mb-4">
+            <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Outline</h2>
+            <pre className="border border-brand-grayBorder rounded-md p-4 text-left whitespace-pre-wrap bg-brand-grayLight mb-4 text-base font-mono">
               {outline}
             </pre>
             <div className="flex gap-2">
               <button
                 onClick={handleBack}
-                className="bg-gray-300 text-gray-800 rounded px-4 py-2 hover:bg-gray-400"
+                className="button-secondary"
                 disabled={loading || draftLoading}
               >
                 Back
               </button>
               <button
                 onClick={handleDraft}
-                className="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700"
+                className="button-primary"
                 disabled={draftLoading}
               >
                 {draftLoading ? 'Generating Draft...' : 'Generate Draft'}
               </button>
             </div>
-            {draftError && <div className="border rounded p-2 text-red-600 text-center mt-4">{draftError}</div>}
+            {draftError && <div className="border border-red-200 rounded-md p-2 text-red-600 text-center bg-red-50 mt-4">{draftError}</div>}
           </>
         )}
         {activeStep === 2 && (
           <>
-            <h2 className="text-xl font-semibold mb-2">Draft</h2>
-            <pre className="border rounded p-4 text-left whitespace-pre-wrap bg-gray-100 mb-4">
+            <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Draft</h2>
+            <pre className="border border-brand-grayBorder rounded-md p-4 text-left whitespace-pre-wrap bg-brand-grayLight mb-4 text-base font-mono">
               {draft}
             </pre>
             <div className="flex gap-2">
               <button
                 onClick={handleBack}
-                className="bg-gray-300 text-gray-800 rounded px-4 py-2 hover:bg-gray-400"
+                className="button-secondary"
                 disabled={loading || draftLoading}
               >
                 Back
