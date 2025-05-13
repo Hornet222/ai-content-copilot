@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { generateOutline, generateDraft, generateImage } from '../lib/api';
+import ReactMarkdown from 'react-markdown';
 
 const steps = [
   { label: "Idea" },
@@ -148,9 +149,11 @@ export default function Home() {
         {activeStep === 1 && (
           <>
             <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Outline</h2>
-            <pre className="border border-brand-grayBorder rounded-md p-4 text-left whitespace-pre-wrap bg-brand-grayLight mb-4 text-base font-mono">
-              {outline}
-            </pre>
+            <div className="border border-brand-grayBorder rounded-md p-4 bg-brand-grayLight mb-4 prose prose-brand max-w-none">
+              <ReactMarkdown>
+                {outline}
+              </ReactMarkdown>
+            </div>
             <div className="flex gap-2">
               <button
                 onClick={handleBack}
@@ -173,9 +176,11 @@ export default function Home() {
         {activeStep === 2 && (
           <>
             <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Draft</h2>
-            <pre className="border border-brand-grayBorder rounded-md p-4 text-left whitespace-pre-wrap bg-brand-grayLight mb-4 text-base font-mono">
-              {draft}
-            </pre>
+            <div className="border border-brand-grayBorder rounded-md p-4 bg-brand-grayLight mb-4 prose prose-brand max-w-none overflow-y-auto max-h-[500px]">
+              <ReactMarkdown>
+                {draft}
+              </ReactMarkdown>
+            </div>
             <div className="flex gap-2">
               <button
                 onClick={handleBack}
