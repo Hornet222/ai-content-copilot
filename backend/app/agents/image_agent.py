@@ -1,5 +1,6 @@
 from openai import OpenAI
 import os
+from app.agents.prompts import IMAGE_GENERATION_PROMPT_TEMPLATE
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
@@ -42,4 +43,13 @@ def generate_image_openai(prompt: str) -> str:
                 raise ValueError("No image data found in DALL-E 2 fallback response.")
         except Exception as fallback_e:
             print(f"Error generating image with DALL-E 2 fallback: {fallback_e}")
-            raise fallback_e 
+            raise fallback_e
+
+def format_image_prompt(topic: str, content_summary: str) -> str:
+    """
+    Format the image generation prompt using the template
+    """
+    return IMAGE_GENERATION_PROMPT_TEMPLATE.format(
+        topic=topic,
+        content_summary=content_summary
+    ) 

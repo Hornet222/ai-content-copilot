@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.agents.outline_agent import generate_outline
 from app.agents.draft_agent import generate_draft
-from app.agents.image_agent import generate_image_openai
+from app.agents.image_agent import generate_image_openai, format_image_prompt
 from app.schemas.outline import OutlineRequest, OutlineResponse
 from app.schemas.draft import DraftRequest, DraftResponse
 from app.schemas.image import ImageRequest, ImageResponse
@@ -34,7 +34,10 @@ def draft(request: DraftRequest):
 
 @app.post("/image", response_model=ImageResponse)
 def image(request: ImageRequest):
-    image_url = generate_image_openai(request.prompt)
+    # If the request already contains a formatted prompt, use it directly
+    # Otherwise, format it using the template (which might be the case in future enhancements)
+    formatted_prompt = request.prompt
+    image_url = generate_image_openai(formatted_prompt)
     return ImageResponse(image_url=image_url)
 
 # Placeholder for agent endpoints
