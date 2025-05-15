@@ -6,3 +6,6 @@ openai
 tavily-python
 sqlalchemy
 psycopg2-binary
+pydantic_ai
+logfire
+python-dotenv

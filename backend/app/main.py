@@ -6,6 +6,7 @@ from app.agents.image_agent import generate_image_openai, format_image_prompt
 from app.schemas.outline import OutlineRequest, OutlineResponse
 from app.schemas.draft import DraftRequest, DraftResponse
 from app.schemas.image import ImageRequest, ImageResponse
+from fastapi import HTTPException
 
 app = FastAPI()
 
@@ -29,8 +30,23 @@ def outline(request: OutlineRequest):
 
 @app.post("/draft", response_model=DraftResponse)
 def draft(request: DraftRequest):
-    draft = generate_draft(request.outline)
-    return DraftResponse(draft=draft)
+    try:
+        # Generate the draft content
+        draft_content = generate_draft(request.outline)
+        
+        # For now, we just return the draft content with metadata
+        # In a future enhancement, we can modify generate_draft to return sources too
+        return DraftResponse(
+            draft=draft_content,
+            metadata={"generated_with": "pydantic_ai multi-agent system with Perplexity research"},
+            research_sources=[
+                # In a future implementation, we'll return actual sources from Perplexity
+                {"title": "Research via Perplexity", "url": "https://www.perplexity.ai/"}
+            ]
+        )
+    except Exception as e:
+        print(f"Error generating draft: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/image", response_model=ImageResponse)
 def image(request: ImageRequest):

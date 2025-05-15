@@ -17,6 +17,7 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+.env
 
 # Docker
 *.log
@@ -27,4 +28,4 @@ docker-compose.override.yml
 Thumbs.db
 
 # Others
-.env*
+
