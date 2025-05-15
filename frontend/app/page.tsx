@@ -95,10 +95,16 @@ export default function Home() {
     setImageUrl('');
     
     try {
-      // Create a prompt from the topic and a summary of the draft
+      // Create a prompt from the topic and a more substantial part of the draft
       // We're using the topic to provide context and asking for an image that represents the content
+      // Limit the content to 1000 characters to prevent payload size issues
+      const maxContentLength = 1000;
+      const truncatedContent = draft.length > maxContentLength ? 
+        draft.substring(0, maxContentLength) + "..." : 
+        draft;
+      
       const prompt = `Create a professional, high-quality image that represents this topic: "${topic}". 
-      The content discusses: ${draft.substring(0, 300)}...
+      The content discusses: ${truncatedContent}
       The image should be suitable for a blog post or article about this topic.`;
       
       const result = await generateImage(prompt);
