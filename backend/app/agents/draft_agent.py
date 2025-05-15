@@ -63,43 +63,48 @@ def generate_draft(outline: str) -> str:
         """
         
         async def run_agent():
+            # Create research context prompt
+            research_context = f"""First, research the following outline for a content article:
+            
+            {outline}
+            
+            Use the Perplexity API to gather relevant information about each section.
+            """
+            
+            # Create the main user prompt
+            user_prompt = f"""
+            Based on your research, write a comprehensive article following this outline:
+            
+            {outline}
+            
+            Include an introduction, well-developed sections, and a conclusion.
+            Use markdown formatting for headings and structure.
+            Cite any sources used in your research.
+            """
+            
+            # Run the agent with MCP servers
             async with draft_agent.run_mcp_servers():
-                # Call Perplexity for research through MCP
-                research_prompt = f"Research the following outline for a content article: {outline}"
-                
-                research_messages = [
-                    {"role": "user", "content": research_prompt}
-                ]
-                
-                research_response = await draft_agent.call_mcp("perplexity_ask", {
-                    "messages": research_messages
-                })
-                
-                research_content = research_response.get("content", "No research found")
-                
-                # Generate the draft using the research
-                final_prompt = f"""
-                Here is an outline to turn into a full article:
-                
-                {outline}
-                
-                Here is research information to incorporate:
-                
-                {research_content}
-                
-                Write a comprehensive article based on the outline and the research.
-                Include an introduction, well-developed sections, and a conclusion.
-                Use markdown formatting for headings and structure.
-                """
-                
-                result = await draft_agent.run(user_prompt=final_prompt)
-                return result
+                result = await draft_agent.run(
+                    user_prompt=f"{research_context}\n{user_prompt}"
+                )
+                # Extract the string output from the AgentRunResult object
+                if hasattr(result, 'output'):
+                    return result.output  # Get the string content
+                else:
+                    # Fallback if the result structure is different
+                    return str(result)
                 
         # Run the async function and get the result
         result = loop.run_until_complete(run_agent())
         
         # Close the loop
         loop.close()
+        
+        # Ensure we're returning a string, not an AgentRunResult object
+        if hasattr(result, 'output'):
+            return result.output
+        elif not isinstance(result, str):
+            return str(result)
         
         # Return the content as a string
         return result

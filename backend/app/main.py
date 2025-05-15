@@ -40,6 +40,12 @@ def draft(request: DraftRequest):
         # Generate the draft content
         draft_content = generate_draft(request.outline)
         
+        # Handle AgentRunResult objects or other unexpected types
+        if hasattr(draft_content, 'output'):
+            draft_content = draft_content.output
+        elif not isinstance(draft_content, str):
+            draft_content = str(draft_content)
+        
         # For now, we just return the draft content with metadata
         # In a future enhancement, we can modify generate_draft to return sources too
         return DraftResponse(
