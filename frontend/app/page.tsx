@@ -99,39 +99,39 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-brand-grayLight">
-      <h1 className="text-4xl font-bold mb-8 text-brand-charcoal tracking-tight">AI Content Co-Pilot</h1>
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-brand-black">
+      <h1 className="text-4xl font-bold mb-8 text-brand-gold tracking-tight">AI Content Co-Pilot</h1>
       {/* Stepper */}
       <div className="flex items-center mb-8 w-full max-w-2xl">
         {steps.map((step, idx) => (
           <>
             <div className="flex flex-col items-center flex-1">
-              <div className={`rounded-full w-9 h-9 flex items-center justify-center font-bold text-white shadow transition-all duration-200
+              <div className={`rounded-full w-9 h-9 flex items-center justify-center font-bold shadow transition-all duration-200
                 ${activeStep === idx
-                  ? 'bg-brand-pink scale-110 shadow-lg'
+                  ? 'bg-brand-gold text-brand-black scale-110 shadow-lg'
                   : activeStep > idx
-                  ? 'bg-brand-charcoal'
-                  : 'bg-brand-grayMedium'}
+                  ? 'bg-brand-charcoal text-brand-white'
+                  : 'bg-transparent border-2 border-brand-grayDark text-brand-grayMedium'}
               `}>
                 {idx + 1}
               </div>
-              <span className={`mt-2 text-xs font-semibold tracking-wide ${activeStep === idx ? 'text-brand-pink' : 'text-brand-grayMedium'}`}>{step.label}</span>
+              <span className={`mt-2 text-xs font-semibold tracking-wide ${activeStep === idx ? 'text-brand-gold' : 'text-brand-grayMedium'}`}>{step.label}</span>
             </div>
             {idx < steps.length - 1 && (
-              <div className={`flex-1 h-1 ${activeStep > idx ? 'bg-brand-charcoal' : 'bg-brand-grayMedium'} mx-1 rounded-full`}></div>
+              <div className={`flex-1 h-1 ${activeStep > idx ? 'bg-brand-gold' : 'bg-brand-grayDark'} mx-1 rounded-full`}></div>
             )}
           </>
         ))}
       </div>
       {/* Step Content */}
-      <div className="w-full max-w-2xl bg-white rounded-md shadow-lg p-8">
+      <div className="w-full max-w-2xl bg-brand-black border border-brand-charcoal rounded-md shadow-lg p-8">
         {activeStep === 0 && (
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <label className="font-semibold text-brand-charcoal">Enter your idea or topic:</label>
+            <label className="font-semibold text-brand-gold">Enter your idea or topic:</label>
             <input
               type="text"
               placeholder="e.g. The Future of AI in Content Creation"
-              className="border border-brand-grayBorder rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-pink text-base placeholder-brand-grayMedium transition"
+              className="border border-brand-charcoal bg-transparent rounded-md px-4 py-3 text-brand-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-base placeholder-brand-grayMedium transition"
               value={topic}
               onChange={e => setTopic(e.target.value)}
               disabled={loading || draftLoading || imageLoading}
@@ -143,13 +143,13 @@ export default function Home() {
             >
               {loading ? 'Generating...' : 'Generate Outline'}
             </button>
-            {error && <div className="border border-red-200 rounded-md p-2 text-red-600 text-center bg-red-50">{error}</div>}
+            {error && <div className="border border-red-500 rounded-md p-2 text-red-400 text-center bg-red-900 bg-opacity-20">{error}</div>}
           </form>
         )}
         {activeStep === 1 && (
           <>
-            <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Outline</h2>
-            <div className="border border-brand-grayBorder rounded-md p-4 bg-brand-grayLight mb-4 prose prose-brand max-w-none">
+            <h2 className="text-2xl font-bold mb-3 text-brand-gold">Outline</h2>
+            <div className="border border-brand-charcoal rounded-md p-4 bg-black bg-opacity-50 mb-4 prose prose-brand max-w-none">
               <ReactMarkdown>
                 {outline}
               </ReactMarkdown>
@@ -170,13 +170,13 @@ export default function Home() {
                 {draftLoading ? 'Generating Draft...' : 'Generate Draft'}
               </button>
             </div>
-            {draftError && <div className="border border-red-200 rounded-md p-2 text-red-600 text-center bg-red-50 mt-4">{draftError}</div>}
+            {draftError && <div className="border border-red-500 rounded-md p-2 text-red-400 text-center bg-red-900 bg-opacity-20 mt-4">{draftError}</div>}
           </>
         )}
         {activeStep === 2 && (
           <>
-            <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Draft</h2>
-            <div className="border border-brand-grayBorder rounded-md p-4 bg-brand-grayLight mb-4 prose prose-brand max-w-none overflow-y-auto max-h-[500px]">
+            <h2 className="text-2xl font-bold mb-3 text-brand-gold">Draft</h2>
+            <div className="border border-brand-charcoal rounded-md p-4 bg-black bg-opacity-50 mb-4 prose prose-brand max-w-none overflow-y-auto max-h-[500px]">
               <ReactMarkdown>
                 {draft}
               </ReactMarkdown>
@@ -197,13 +197,13 @@ export default function Home() {
                 {imageLoading ? 'Generating Image...' : 'Generate Image'}
               </button>
             </div>
-            {imageError && <div className="border border-red-200 rounded-md p-2 text-red-600 text-center bg-red-50 mt-4">{imageError}</div>}
+            {imageError && <div className="border border-red-500 rounded-md p-2 text-red-400 text-center bg-red-900 bg-opacity-20 mt-4">{imageError}</div>}
           </>
         )}
         {activeStep === 3 && (
           <>
-            <h2 className="text-2xl font-bold mb-3 text-brand-charcoal">Featured Image</h2>
-            <div className="border border-brand-grayBorder rounded-md overflow-hidden mb-4">
+            <h2 className="text-2xl font-bold mb-3 text-brand-gold">Featured Image</h2>
+            <div className="border border-brand-charcoal rounded-md overflow-hidden mb-4">
               <img 
                 src={imageUrl} 
                 alt="Generated content image" 

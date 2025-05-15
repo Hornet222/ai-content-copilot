@@ -9,13 +9,13 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          pink: '#D81B60', // Primary Accent
-          pinkDark: '#C2185B', // Hover/active
-          charcoal: '#1A1A1A', // Neutral Dark
-          white: '#FFFFFF', // Neutral Light
-          grayLight: '#F5F5F5', // Neutral Gray (light)
-          grayMedium: '#6E6E6E', // Neutral Gray (medium)
-          grayBorder: '#E0E0E0', // Subtle borders
+          black: '#000000',          // Primary Background
+          white: '#FFFFFF',          // Primary Text
+          gold: '#c9a670',           // New gold color for headings and accents
+          grayMedium: '#888888',     // Secondary Text
+          grayDark: '#555555',       // Lighter separators
+          charcoal: '#303032',       // Borders and Lines
+          accent: '#9FDED5',         // Subtle teal-gray accent for highlights
         },
       },
       fontFamily: {
@@ -27,45 +27,45 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            color: theme('colors.brand.charcoal'),
+            color: theme('colors.brand.white'), // Updated for dark mode
             h1: {
-              color: theme('colors.brand.charcoal'),
+              color: theme('colors.brand.gold'),
               fontWeight: '700',
             },
             h2: {
-              color: theme('colors.brand.charcoal'),
+              color: theme('colors.brand.gold'),
               fontWeight: '600',
             },
             h3: {
-              color: theme('colors.brand.charcoal'),
+              color: theme('colors.brand.gold'),
               fontWeight: '600',
             },
             strong: {
-              color: theme('colors.brand.charcoal'),
+              color: theme('colors.brand.gold'),
               fontWeight: '600',
             },
             a: {
-              color: theme('colors.brand.pink'),
+              color: theme('colors.brand.gold'),
               '&:hover': {
-                color: theme('colors.brand.pinkDark'),
+                color: theme('colors.brand.white'),
               },
             },
             blockquote: {
-              borderLeftColor: theme('colors.brand.pink'),
+              borderLeftColor: theme('colors.brand.charcoal'),
               color: theme('colors.brand.grayMedium'),
             },
-            hr: { borderColor: theme('colors.brand.grayBorder') },
+            hr: { borderColor: theme('colors.brand.charcoal') },
             ol: {
               li: {
-                '&:before': { color: theme('colors.brand.pink') },
+                '&:before': { color: theme('colors.brand.gold') },
               },
             },
             ul: {
               li: {
-                '&:before': { backgroundColor: theme('colors.brand.pink') },
+                '&:before': { backgroundColor: theme('colors.brand.gold') },
               },
             },
-            code: { color: theme('colors.brand.pink') },
+            code: { color: theme('colors.brand.gold') },
             pre: {
               backgroundColor: theme('colors.brand.charcoal'),
               color: theme('colors.brand.white'),

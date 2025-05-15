@@ -3,12 +3,23 @@
 @tailwind utilities;
 
 html, body {
-  @apply bg-brand-white text-brand-charcoal font-sans;
+  @apply bg-brand-black text-brand-white font-sans;
 }
 
 .button-primary {
-  @apply bg-brand-pink text-white font-semibold text-base px-6 py-3 rounded-md shadow-sm transition hover:bg-brand-pinkDark focus:outline-none focus:ring-2 focus:ring-brand-pink focus:ring-offset-2;
+  @apply bg-transparent border-2 border-brand-gold text-brand-gold font-semibold text-base px-6 py-3 rounded-md shadow-sm transition hover:bg-brand-gold hover:text-brand-black focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-black;
 }
+
 .button-secondary {
-  @apply border-2 border-brand-pink text-brand-pink bg-white font-semibold text-base px-6 py-3 rounded-md transition hover:bg-brand-pink hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink focus:ring-offset-2;
+  @apply border-2 border-brand-charcoal text-brand-grayMedium bg-transparent font-semibold text-base px-6 py-3 rounded-md transition hover:border-brand-gold hover:text-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-charcoal focus:ring-offset-2 focus:ring-offset-brand-black;
+}
+
+/* Gold text for headings and important elements */
+.gold-text {
+  @apply text-brand-gold;
+}
+
+/* Accent style for special elements */
+.accent-element {
+  @apply text-brand-gold hover:text-brand-white transition-colors;
 } 
