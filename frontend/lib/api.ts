@@ -1,5 +1,7 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export async function generateOutline(topic: string): Promise<string> {
-  const res = await fetch("http://localhost:8000/outline", {
+  const res = await fetch(`${API_URL}/outline`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ topic }),
@@ -10,7 +12,7 @@ export async function generateOutline(topic: string): Promise<string> {
 }
 
 export async function generateDraft(outline: string): Promise<string> {
-  const res = await fetch("http://localhost:8000/draft", {
+  const res = await fetch(`${API_URL}/draft`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ outline }),
@@ -21,7 +23,7 @@ export async function generateDraft(outline: string): Promise<string> {
 }
 
 export async function generateImage(prompt: string): Promise<string> {
-  const res = await fetch("http://localhost:8000/image", {
+  const res = await fetch(`${API_URL}/image`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt }),

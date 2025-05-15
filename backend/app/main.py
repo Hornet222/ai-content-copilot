@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
 from app.agents.outline_agent import generate_outline
 from app.agents.draft_agent import generate_draft
 from app.agents.image_agent import generate_image_openai, format_image_prompt
@@ -8,12 +9,17 @@ from app.schemas.draft import DraftRequest, DraftResponse
 from app.schemas.image import ImageRequest, ImageResponse
 from fastapi import HTTPException
 
-app = FastAPI()
+app = FastAPI(title="AI Content Co-Pilot API", 
+              description="API for generating content with AI",
+              version="1.0.0")
 
-# Allow CORS for local frontend development
+# Get allowed origins from environment variables or use default for local development
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
+# Allow CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
