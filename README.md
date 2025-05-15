@@ -7,6 +7,7 @@ An AI-powered web application that assists users in generating, refining, and ad
 - ✅ Idea input & topic definition
 - ✅ Outline generation & refinement
 - ✅ Content drafting (with AI-powered writing)
+- ✅ Internet research capabilities for up-to-date content
 - ✅ Image generation (using DALL-E 3)
 - ⏳ Content adaptation for multiple platforms (coming soon)
 - ⏳ SEO optimization (planned)
@@ -15,16 +16,22 @@ An AI-powered web application that assists users in generating, refining, and ad
 ## How to Use
 1. **Start with an Idea**: Enter your content topic or idea
 2. **Generate an Outline**: The AI will create a structured outline for your content
-3. **Create a Draft**: Turn your outline into a complete draft article
+3. **Create a Draft**: Turn your outline into a complete draft article with up-to-date research
 4. **Generate an Image**: Create a custom image that matches your content
 
 ## Tech Stack
 **Frontend:** Next.js (React), Tailwind CSS, Custom UI components
 
-**Backend:** Python, FastAPI, Langchain, OpenAI
+**Backend:** Python, FastAPI, pydantic_AI, OpenAI
+
+**Agent Architecture:**
+- pydantic_AI for composable agent frameworks
+- MCPServerStdio for Perplexity research capabilities
+- Multi-agent approach for drafting with internet research
 
 **APIs:** 
 - OpenAI GPT (for text generation)
+- Perplexity (for internet research)
 - DALL-E 3 (for image generation)
 
 **DevOps:** Docker, Docker Compose
@@ -50,11 +57,19 @@ ai-content-copilot/
 └── README.md
 ```
 
+## Draft Generation Process
+1. The system receives an outline from the user
+2. Using the Perplexity MCP server, the draft agent researches key facts about the outline topics
+3. Based on the research, the agent generates a comprehensive, factually accurate draft
+4. The system includes error handling and fallback mechanisms for reliability
+
 ## Setup Instructions
 1. Clone the repository
-2. Create a `.env` file in the project root with your OpenAI API key:
+2. Create a `.env` file in the project root with your API keys:
    ```
-   OPENAI_API_KEY=your_api_key_here
+   OPENAI_API_KEY=your_openai_api_key_here
+   PERPLEXITY_API_KEY=your_perplexity_api_key_here
+   LLM_MODEL=gpt-4o
    ```
 3. Build and start the application:
    ```
