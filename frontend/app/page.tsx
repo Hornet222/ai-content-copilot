@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { generateOutline, generateDraft, generateImage } from '../lib/api';
 import ReactMarkdown from 'react-markdown';
 
@@ -9,6 +9,35 @@ const steps = [
   { label: "Draft" },
   { label: "Image" },
 ];
+
+// Loading Overlay Component
+const LoadingOverlay = ({ message = "Thinking...", isVisible = false, onTimeout = () => {} }) => {
+  useEffect(() => {
+    // Set a timeout to prevent the loading overlay from getting stuck indefinitely
+    let timeoutId: ReturnType<typeof setTimeout>;
+    
+    if (isVisible) {
+      timeoutId = setTimeout(() => {
+        onTimeout();
+      }, 60000); // 60 second timeout
+    }
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isVisible, onTimeout]);
+
+  if (!isVisible) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+      <div className="bg-brand-black border border-brand-charcoal rounded-lg p-6 flex flex-col items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-gold mb-4"></div>
+        <p className="text-brand-gold font-medium">{message}</p>
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
   const [topic, setTopic] = useState('');
@@ -82,6 +111,20 @@ export default function Home() {
     }
   };
 
+  // Handle timeout for loading overlays
+  const handleTimeout = (process: string) => {
+    if (process === 'outline') {
+      setLoading(false);
+      setError('Outline generation timed out. Please try again.');
+    } else if (process === 'draft') {
+      setDraftLoading(false);
+      setDraftError('Draft generation timed out. Please try again.');
+    } else if (process === 'image') {
+      setImageLoading(false);
+      setImageError('Image generation timed out. Please try again.');
+    }
+  };
+
   const handleBack = () => {
     if (activeStep === 3) {
       setImageUrl('');
@@ -100,6 +143,23 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-brand-black">
+      {/* Loading Overlays */}
+      <LoadingOverlay 
+        message="Creating your outline..." 
+        isVisible={loading} 
+        onTimeout={() => handleTimeout('outline')} 
+      />
+      <LoadingOverlay 
+        message="Researching and writing your draft..." 
+        isVisible={draftLoading} 
+        onTimeout={() => handleTimeout('draft')} 
+      />
+      <LoadingOverlay 
+        message="Generating your image..." 
+        isVisible={imageLoading} 
+        onTimeout={() => handleTimeout('image')} 
+      />
+      
       <h1 className="text-4xl font-bold mb-8 text-brand-gold tracking-tight">AI Content Co-Pilot</h1>
       {/* Stepper */}
       <div className="flex items-center mb-8 w-full max-w-2xl">
@@ -141,7 +201,7 @@ export default function Home() {
               className="button-primary mt-2 disabled:opacity-60"
               disabled={loading || !topic.trim() || draftLoading || imageLoading}
             >
-              {loading ? 'Generating...' : 'Generate Outline'}
+              Generate Outline
             </button>
             {error && <div className="border border-red-500 rounded-md p-2 text-red-400 text-center bg-red-900 bg-opacity-20">{error}</div>}
           </form>
@@ -167,7 +227,7 @@ export default function Home() {
                 className="button-primary"
                 disabled={draftLoading || imageLoading}
               >
-                {draftLoading ? 'Generating Draft...' : 'Generate Draft'}
+                Generate Draft
               </button>
             </div>
             {draftError && <div className="border border-red-500 rounded-md p-2 text-red-400 text-center bg-red-900 bg-opacity-20 mt-4">{draftError}</div>}
@@ -194,7 +254,7 @@ export default function Home() {
                 className="button-primary"
                 disabled={imageLoading}
               >
-                {imageLoading ? 'Generating Image...' : 'Generate Image'}
+                Generate Image
               </button>
             </div>
             {imageError && <div className="border border-red-500 rounded-md p-2 text-red-400 text-center bg-red-900 bg-opacity-20 mt-4">{imageError}</div>}
