@@ -7,7 +7,7 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 def generate_image_openai(prompt: str) -> str:
     try:
         response = client.images.generate(
-            model= "dall-e-3", # Using DALL-E 3 as per gpt-4o context
+            model= "gpt-image-1" , # Using DALL-E 3 as per gpt-4o context
             prompt=prompt,
             n=1,
             size="1024x1024",
@@ -27,7 +27,7 @@ def generate_image_openai(prompt: str) -> str:
         try:
             print("Falling back to dall-e-2 for image generation...")
             response = client.images.generate(
-                model="dall-e-2",
+                model="dall-e-3",
                 prompt=prompt,
                 n=1,
                 size="1024x1024",
