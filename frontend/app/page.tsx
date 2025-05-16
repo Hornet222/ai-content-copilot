@@ -51,6 +51,7 @@ export default function Home() {
   const [draftError, setDraftError] = useState('');
   const [imageError, setImageError] = useState('');
   const [activeStep, setActiveStep] = useState(0);
+  const [showCirrusVideo, setShowCirrusVideo] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -61,6 +62,8 @@ export default function Home() {
     setImageUrl('');
     setDraftError('');
     setImageError('');
+    // Check if the topic contains "Cirrus Cloud"
+    setShowCirrusVideo(topic.toLowerCase().includes('cirrus cloud'));
     try {
       const result = await generateOutline(topic);
       setOutline(result);
@@ -143,6 +146,7 @@ export default function Home() {
       setOutline('');
       setDraft('');
       setImageUrl('');
+      // Don't reset the showCirrusVideo flag here to maintain the video through navigation
       setActiveStep(0);
     }
   };
@@ -276,6 +280,23 @@ export default function Home() {
                 className="w-full h-auto"
               />
             </div>
+            
+            {/* Cirrus Cloud Video - only displayed when the topic contains "Cirrus Cloud" */}
+            {showCirrusVideo && (
+              <div className="mt-6 mb-4">
+                <h3 className="text-xl font-bold mb-3 text-brand-gold">Featured Promotional Video</h3>
+                <div className="border border-brand-charcoal rounded-md overflow-hidden">
+                              <video 
+              controls
+              className="w-full h-auto"
+            >
+                    <source src="/Cirrus Cloud Energy Drink.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            )}
+            
             <div className="flex gap-2">
               <button
                 onClick={handleBack}
