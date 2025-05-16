@@ -27,5 +27,6 @@ docker-compose.override.yml
 .DS_Store
 Thumbs.db
 
-# Others
+# Media
+*.mp4
 
